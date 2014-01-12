@@ -130,6 +130,9 @@ function joints_scripts_and_styles() {
     // register main stylesheet
     wp_register_style( 'joints-stylesheet', get_stylesheet_directory_uri() . '/library/css/style.css', array(), '', 'all' );
     
+    // register foundation stylesheet
+    wp_register_style( 'foundation-stylesheet', get_stylesheet_directory_uri() . '/library/css/foundation.css', array(), '', 'all' );
+    
     // register foundation icons
     wp_register_style( 'foundation-icons', get_stylesheet_directory_uri() . '/library/css/icons/foundation-icons.css', array(), '', 'all' );
 
@@ -145,6 +148,7 @@ function joints_scripts_and_styles() {
     wp_enqueue_script( 'joints-modernizr' );
     wp_enqueue_script ('foundation-js');
     wp_enqueue_style( 'joints-stylesheet' );
+    wp_enqueue_style( 'foundation-stylesheet' );
      wp_enqueue_style( 'foundation-icons' );
 
     $wp_styles->add_data( 'joints-ie-only', 'conditional', 'lt IE 9' ); // add conditional wrapper around ie stylesheet
@@ -386,7 +390,4 @@ function joints_get_the_author_posts_link() {
 	);
 	return $link;
 }
-
-
 ?>
- 
