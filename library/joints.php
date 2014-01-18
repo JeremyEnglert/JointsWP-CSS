@@ -127,14 +127,14 @@ function joints_scripts_and_styles() {
     // adding Foundation scripts file in the footer
     wp_register_script( 'foundation-js', get_template_directory_uri() . '/library/js/foundation.min.js', array( 'jquery' ), '', true );
    
-    // register main stylesheet
-    wp_register_style( 'joints-stylesheet', get_stylesheet_directory_uri() . '/library/css/style.css', array(), '', 'all' );
-    
     // register foundation stylesheet
     wp_register_style( 'foundation-stylesheet', get_stylesheet_directory_uri() . '/library/css/foundation.css', array(), '', 'all' );
     
     // register foundation icons
     wp_register_style( 'foundation-icons', get_stylesheet_directory_uri() . '/library/css/icons/foundation-icons.css', array(), '', 'all' );
+    
+    // register main stylesheet
+    wp_register_style( 'joints-stylesheet', get_stylesheet_directory_uri() . '/library/css/style.css', array(), '', 'all' );
 
     // comment reply script for threaded comments
     if ( is_singular() AND comments_open() AND (get_option('thread_comments') == 1)) {
@@ -147,11 +147,9 @@ function joints_scripts_and_styles() {
     // enqueue styles and scripts
     wp_enqueue_script( 'joints-modernizr' );
     wp_enqueue_script ('foundation-js');
-    wp_enqueue_style( 'joints-stylesheet' );
     wp_enqueue_style( 'foundation-stylesheet' );
-     wp_enqueue_style( 'foundation-icons' );
-
-    $wp_styles->add_data( 'joints-ie-only', 'conditional', 'lt IE 9' ); // add conditional wrapper around ie stylesheet
+    wp_enqueue_style( 'foundation-icons' );
+    wp_enqueue_style( 'joints-stylesheet' );
 
     /*
     I recommend using a plugin to call jQuery
