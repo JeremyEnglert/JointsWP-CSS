@@ -510,7 +510,7 @@ This is the average viewing window. So Desktops, Laptops, and
 in general anyone not viewing on a mobile device. Here's where
 you can add resource intensive styles.
 */
-@media only screen and (min-width: 90.063) {
+@media only screen and (min-width: 90.063em) {
   /******************************************************************
   
   Stylesheet: 1280px and Up
