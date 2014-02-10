@@ -1,5 +1,5 @@
 @charset "UTF-8";
-@import url("//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,400,300,700");
+@import "//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,400,300,700";
 /******************************************************************
 
 Stylesheet: Main Stylesheet
@@ -10,24 +10,58 @@ and is called at the beginning, after that we call the rest
 of the styles inside media queries.
 ******************************************************************/
 
-/*
-SMALL (BASE) SIZE
-These are the small/base styles. It's what people see on their phones. If
-you set a great foundation, you won't need to add too many styles in
-the other stylesheets. Remember, keep it light: Speed is Important.
-*/
+/******************************************************************
 
+Stylesheet: Base/Small Stylesheet
+
+Be light and don't over style since everything here will be
+loaded by mobile devices. You want to keep it as minimal as
+possible. This is called at the top of the main stylsheet
+and will be used across all viewports.
+
+******************************************************************/
 /*********************
 GENERAL STYLES
-
 *********************/
-
 /********************
 WORDPRESS BODY CLASSES
 style a page via class
-
 ********************/
-
+/* for sites that are read right to left (i.e. hebrew) */
+/* home page */
+/* blog template page */
+/* archive page */
+/* date archive page */
+/* replace the number to the corresponding page number */
+/* search page */
+/* search result page */
+/* no results search page */
+/* individual paged search (i.e. body.search-paged-3) */
+/* 404 page */
+/* single post page */
+/* individual post page by id (i.e. body.postid-73) */
+/* individual paged single (i.e. body.single-paged-3) */
+/* attatchment page */
+/* individual attatchment page (i.e. body.attachmentid-763) */
+/* style mime type pages */
+/* author page */
+/* user nicename (i.e. body.author-samueladams) */
+/* paged author archives (i.e. body.author-paged-4) for page 4 */
+/* category page */
+/* individual category page (i.e. body.category-6) */
+/* replace the number to the corresponding page number */
+/* tag page */
+/* individual tag page (i.e. body.tag-news) */
+/* replace the number to the corresponding page number */
+/* custom page template page */
+/* individual page template (i.e. body.page-template-contact-php */
+/* replace the number to the corresponding page number */
+/* parent page template */
+/* child page template */
+/* replace the number to the corresponding page number */
+/* if user is logged in */
+/* paged items like search results or archives */
+/* individual paged (i.e. body.paged-3) */
 /*********************
 LAYOUT & GRID STYLES
 *********************/
@@ -42,9 +76,6 @@ a, a:visited {
   /*adds highlight on hover */
   /* on click */
   /* mobile tap color */ }
-  a:hover, a:focus, a:visited:hover, a:visited:focus {
-    background: #008cba;
-    color: #fff; }
   a:link, a:visited:link {
     /*
     this highlights links on iPhones/iPads.
@@ -56,9 +87,6 @@ a, a:visited {
 /******************************************************************
 H1, H2, H3, H4, H5 P STYLES
 ******************************************************************/
-p {
-  font-family: "Open Sans"; }
-
 h1, .h1, h2, .h2, h3, .h3, h4, .h4, h5, .h5 {
   /*
   if you're going to use webfonts, be sure to check your weights
@@ -75,32 +103,29 @@ HEADER STYLES
   margin-bottom: 20px; }
   .header #inner-header li {
     list-style: none; }
-  .header #inner-header .off-canvas-list ul {
-    margin-left: 0; }
-    .header #inner-header .off-canvas-list ul .dropdown {
-      margin-left: 20px; }
-
-#logo {
-  margin: 0.57em 0 0.17em;
-  font-size: 2.75rem;
-  font-weight: bold; }
 
 /*********************
 NAVIGATION STYLES
 *********************/
-/*
-all navs have a .nav class applied via
-the wp_menu function; this is so we can
-easily write one group of styles for
-the navs on the site so our css is cleaner
-and more scalable.
-*/
 .top-bar .title-area {
   z-index: 1; }
+
+.off-canvas-list ul {
+  margin-left: 0; }
+  .off-canvas-list ul li a {
+    border-bottom: 0px; }
+  .off-canvas-list ul .dropdown {
+    margin-left: 20px; }
 
 /*********************
 POSTS & CONTENT STYLES
 *********************/
+#content {
+  /*adds highlight on hover */ }
+  #content a:hover, #content a:focus {
+    background: #008cba;
+    color: #fff; }
+
 /* end .hentry */
 /* want to style individual post classes? Booya! */
 /* post by id (i.e. post-3) */
@@ -232,6 +257,8 @@ COMMENT STYLES
     font-size: 1em;
     line-height: 1.5em; }
   .commentlist .comment-reply-link {
+    border-style: solid;
+    border-width: 0px;
     cursor: pointer;
     font-family: "Open Sans", Arial, sans-serif;
     font-weight: normal;
@@ -248,11 +275,11 @@ COMMENT STYLES
     font-size: 0.8125rem;
     /*     @else                            { font-size: $padding - rem-calc(2); } */
     background-color: #008cba;
-    border-color: #0079a1;
+    border-color: #007095;
     color: white;
     float: right; }
     .commentlist .comment-reply-link:hover, .commentlist .comment-reply-link:focus {
-      background-color: #0079a1; }
+      background-color: #007095; }
     .commentlist .comment-reply-link:hover, .commentlist .comment-reply-link:focus {
       color: white; }
 
@@ -331,6 +358,9 @@ SIDEBARS & ASIDES
     list-style: none;
     /* deep nesting */ }
 
+#sidebar-offcanvas .widgettitle {
+  color: #fff; }
+
 /*********************
 FOOTER STYLES
 *********************/
@@ -348,49 +378,33 @@ override these styles for the desktop
 view.
 */
 /* end .footer-links */
+/*********************
+FOUNDATION STYLES
+*********************/
+.clearing-assembled.clearing-blackout a:hover {
+  background: none; }
+
+/*********************
+PLUGIN STYLES
+*********************/
+.gform_body ul {
+  list-style: none outside none;
+  margin: 0; }
 
 /*
 MEDIUM
-This is for devices like the Galaxy Note or something that's
-larger than an iPhone but smaller than a tablet. Let's call them
-tweeners.
 */
 @media only screen and (min-width: 40.063em) {
   /******************************************************************
   
-  Stylesheet: 481px and Up Stylesheet
+  Stylesheet: Nediun Stylesheet
   
-  This stylesheet is loaded for larger devices. It's set to 
-  481px because at 480px it would load on a landscaped iPhone.
-  This isn't ideal because then you would be loading all those
-  extra styles on that same mobile connection. 
-  
-  A word of warning. This size COULD be a larger mobile device,
-  so you still want to keep it pretty light and simply expand
-  upon your base.scss styles.
+  Styles apply to 40.063em and up.
   
   ******************************************************************/
   /*********************
   NAVIGATION STYLES
   *********************/
-  /* .menu is clearfixed inside mixins.scss */
-  .menu {
-    /* end .menu ul */ }
-    .menu ul {
-      /* end .menu ul li */
-      /* highlight current page */
-      /* end current highlighters */ }
-      .menu ul li {
-        /*
-        plan your menus and drop-downs wisely.
-        */ }
-        .menu ul li a {
-          /*
-          you can use hover styles here even though this size
-          has the possibility of being a mobile device.
-          */ }
-
-  /* end .menu */
   /*********************
   POSTS & CONTENT STYLES
   *********************/
@@ -426,8 +440,13 @@ tweeners.
   check your menus here. do they look good?
   do they need tweaking?
   */
-  /* end .footer-links */ }
-  
+  /* end .footer-links */
+  /*********************
+  FOUNDATION STYLES
+  *********************/
+  /*********************
+  PLUGIN STYLES
+  *********************/ }
 /*
 LARGE
 This is the average viewing window. So Desktops, Laptops, and
@@ -437,13 +456,9 @@ you can add resource intensive styles.
 @media only screen and (min-width: 64.063em) {
   /******************************************************************
   
-  Stylesheet: 768px and Up
+  Stylesheet: Large Stylesheet
   
-  Here's where you can start getting into the good stuff.
-  This size will work on iPads, other tablets, and desktops.
-  So you can start working with more styles, background images,
-  and other resources. You'll also notice the grid starts to
-  come into play. Have fun!
+  Styles apply to 64.063em and up.
   
   ******************************************************************/
   /*********************
@@ -461,11 +476,6 @@ you can add resource intensive styles.
   /*********************
   NAVIGATION STYLES
   *********************/
-  .nav {
-    /* highlight current page */
-    /* end current highlighters */ }
-
-  /* end .nav.footer-nav */
   /*********************
   SIDEBARS & ASIDES
   *********************/
@@ -502,38 +512,36 @@ you can add resource intensive styles.
     the footer.
     */ }
 
-  /* end .footer-links */ }
-  
+  /* end .footer-links */
+  /*********************
+  FOUNDATION STYLES
+  *********************/
+  /*********************
+  PLUGIN STYLES
+  *********************/ }
 /*
 XLARGE
-This is the average viewing window. So Desktops, Laptops, and
-in general anyone not viewing on a mobile device. Here's where
-you can add resource intensive styles.
 */
-@media only screen and (min-width: 90.063em) {
+@media only screen and (min-width: 90.063) {
   /******************************************************************
   
-  Stylesheet: 1280px and Up
+  Stylesheet: X-Large Stylesheet
   
-  This is the desktop size. It's larger than an iPad so it will only
-  be seen on the Desktop. 
+  Styles apply to 90.063em and up.
+  
   
   ******************************************************************/ }
-  
 /*
 XXLARGE
-This is for the larger monitors and possibly full screen viewers.
 */
 @media only screen and (min-width: 120.063em) {
   /******************************************************************
   
-  Stylesheet: 1440px and Up
+  Stylesheet: XX-Large Stylesheet
   
-  You can add some advanced styles here if you like. This kicks in
-  on larger screens.
+  Styles apply to 120.063em and up.
   
   ******************************************************************/ }
-  
 /*
 RETINA (2x RESOLUTION DEVICES)
 This applies to the retina iPhone (4s) and iPad (2,3) along with
