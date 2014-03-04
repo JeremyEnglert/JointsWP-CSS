@@ -1,15 +1,9 @@
-@charset "UTF-8";
-@import "//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,400,300,700";
-/******************************************************************
-
-Stylesheet: Main Stylesheet
-
-Here's where the magic happens. Here, you'll see we are calling in
-the separate media queries. The base mobile goes outside any query
-and is called at the beginning, after that we call the rest
-of the styles inside media queries.
-******************************************************************/
-
+/*
+SMALL (BASE) SIZE
+These are the small/base styles. It's what people see on their phones. If
+you set a great foundation, you won't need to add too many styles in
+the other stylesheets. Remember, keep it light: Speed is Important.
+*/
 /******************************************************************
 
 Stylesheet: Base/Small Stylesheet
@@ -65,10 +59,6 @@ style a page via class
 /*********************
 LAYOUT & GRID STYLES
 *********************/
-.wrap {
-  width: 96%;
-  margin: 0 auto; }
-
 /*********************
 LINK STYLES
 *********************/
@@ -522,7 +512,7 @@ you can add resource intensive styles.
 /*
 XLARGE
 */
-@media only screen and (min-width: 90.063) {
+@media only screen and (min-width: 90.063em) {
   /******************************************************************
   
   Stylesheet: X-Large Stylesheet
