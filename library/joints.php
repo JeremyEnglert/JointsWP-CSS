@@ -121,8 +121,14 @@ function joints_scripts_and_styles() {
   global $wp_styles; // call global $wp_styles variable to add conditional wrapper around ie stylesheet the WordPress way
   if (!is_admin()) {
 
+    // removes WP version of jQuery
+    wp_deregister_script('jquery');
+    
+   // loads jQuery 2.1.0
+    wp_enqueue_script( 'jquery', get_template_directory_uri() . '/bower_components/foundation/js/vendor/jquery.js', array(), '2.1.0', false );
+    
     // modernizr (without media query polyfill)
-    wp_enqueue_script( 'joints-modernizr', get_stylesheet_directory_uri() . '/foundation/js/vendor/modernizr.js', array(), '2.5.3', false );
+    wp_enqueue_script( 'joints-modernizr', get_template_directory_uri() . '/foundation/js/vendor/modernizr.js', array(), '2.5.3', false );
     
     // adding Foundation scripts file in the footer
     wp_enqueue_script( 'foundation-js', get_template_directory_uri() . '/foundation/js/foundation.min.js', array( 'jquery' ), '', true );
@@ -155,15 +161,6 @@ function joints_scripts_and_styles() {
     wp_enqueue_script( 'joints-js' );
 
   }
-}
-
-    
-//Replace jQuery with Google CDN jQuery
-if (!is_admin()) add_action("wp_enqueue_scripts", "my_jquery_enqueue", 11);
-function my_jquery_enqueue() {
-   wp_deregister_script('jquery');
-   wp_register_script('jquery', "http" . ($_SERVER['SERVER_PORT'] == 443 ? "s" : "") . "://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js", false, null);
-   wp_enqueue_script('jquery');
 }
 
 /*********************
