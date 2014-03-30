@@ -122,13 +122,16 @@ function joints_scripts_and_styles() {
   if (!is_admin()) {
 
     // modernizr (without media query polyfill)
-    wp_enqueue_script( 'joints-modernizr', get_stylesheet_directory_uri() . '/library/js/vendor/modernizr.js', array(), '2.5.3', false );
+    wp_enqueue_script( 'joints-modernizr', get_stylesheet_directory_uri() . '/foundation/js/vendor/modernizr.js', array(), '2.5.3', false );
     
     // adding Foundation scripts file in the footer
-    wp_enqueue_script( 'foundation-js', get_template_directory_uri() . '/library/js/foundation.min.js', array( 'jquery' ), '', true );
+    wp_enqueue_script( 'foundation-js', get_template_directory_uri() . '/foundation/js/foundation.min.js', array( 'jquery' ), '', true );
    
     // register foundation stylesheet
-    wp_enqueue_style( 'foundation-stylesheet', get_stylesheet_directory_uri() . '/library/css/foundation.css', array(), '', 'all' );
+    wp_enqueue_style( 'foundation-stylesheet', get_stylesheet_directory_uri() . '/foundation/css/foundation.min.css', array(), '', 'all' );
+    
+    // register normalize stylesheet
+    wp_enqueue_style( 'normalize-stylesheet', get_stylesheet_directory_uri() . '/foundation/css/normalize.css', array(), '', 'all' );
     
     // register foundation icons
     wp_enqueue_style( 'foundation-icons', get_stylesheet_directory_uri() . '/library/css/icons/foundation-icons.css', array(), '', 'all' );
