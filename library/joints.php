@@ -51,7 +51,7 @@ function joints_start() {
 
 /*********************
 WP_HEAD GOODNESS
-The default wordpress head is a mess. 
+The default wordpress head is a mess.
 Let's clean it up by removing all the junk we don't need.
 *********************/
 
@@ -123,27 +123,27 @@ function joints_scripts_and_styles() {
 
     // removes WP version of jQuery
     wp_deregister_script('jquery');
-    
+
    // loads jQuery 2.1.0
     wp_enqueue_script( 'jquery', get_template_directory_uri() . '/foundation/js/vendor/jquery.js', array(), '2.1.0', false );
-    
+
     // modernizr (without media query polyfill)
     wp_enqueue_script( 'joints-modernizr', get_template_directory_uri() . '/foundation/js/vendor/modernizr.js', array(), '2.5.3', false );
-    
+
     // adding Foundation scripts file in the footer
     wp_enqueue_script( 'foundation-js', get_template_directory_uri() . '/foundation/js/foundation.min.js', array( 'jquery' ), '', true );
-   
+
     // register foundation stylesheet
-    wp_enqueue_style( 'foundation-stylesheet', get_stylesheet_directory_uri() . '/foundation/css/foundation.min.css', array(), '', 'all' );
-    
+    wp_enqueue_style( 'foundation-stylesheet', get_template_directory_uri() . '/foundation/css/foundation.min.css', array(), '', 'all' );
+
     // register normalize stylesheet
-    wp_enqueue_style( 'normalize-stylesheet', get_stylesheet_directory_uri() . '/foundation/css/normalize.css', array(), '', 'all' );
-    
+    wp_enqueue_style( 'normalize-stylesheet', get_template_directory_uri() . '/foundation/css/normalize.css', array(), '', 'all' );
+
     // register foundation icons
-    wp_enqueue_style( 'foundation-icons', get_stylesheet_directory_uri() . '/library/css/icons/foundation-icons.css', array(), '', 'all' );
-    
+    wp_enqueue_style( 'foundation-icons', get_template_directory_uri() . '/library/css/icons/foundation-icons.css', array(), '', 'all' );
+
     // register main stylesheet
-    wp_enqueue_style( 'joints-stylesheet', get_stylesheet_directory_uri() . '/library/css/style.css', array(), '', 'all' );
+    wp_enqueue_style( 'joints-stylesheet', get_template_directory_uri() . '/library/css/style.css', array(), '', 'all' );
 
     // comment reply script for threaded comments
     if ( is_singular() AND comments_open() AND (get_option('thread_comments') == 1)) {
@@ -151,7 +151,7 @@ function joints_scripts_and_styles() {
     }
 
     //adding scripts file in the footer
-    wp_enqueue_script( 'joints-js', get_stylesheet_directory_uri() . '/library/js/scripts.js', array( 'jquery' ), '', true );
+    wp_enqueue_script( 'joints-js', get_template_directory_uri() . '/library/js/scripts.js', array( 'jquery' ), '', true );
 
     /*
     I recommend using a plugin to call jQuery
@@ -176,7 +176,7 @@ function joints_theme_support() {
 	// default thumb size
 	set_post_thumbnail_size(125, 125, true);
 
-	// rss 
+	// rss
 	add_theme_support('automatic-feed-links');
 
 	// to add header image support go here: http://themble.com/support/adding-header-background-image-support/
@@ -198,16 +198,16 @@ function joints_theme_support() {
 
 	// wp menus
 	add_theme_support( 'menus' );
-	
+
 	//html5 support (http://themeshaper.com/2013/08/01/html5-support-in-wordpress-core/)
-	add_theme_support( 'html5', 
-	         array( 
-	         	'comment-list', 
-	         	'comment-form', 
-	         	'search-form', 
-	         ) 
+	add_theme_support( 'html5',
+	         array(
+	         	'comment-list',
+	         	'comment-form',
+	         	'search-form',
+	         )
 	);
-	
+
 
 } /* end joints theme support */
 
@@ -307,17 +307,17 @@ ADD FOUNDATION FEATURES TO WORDPRESS
 function nav_menu_item_parent_classing( $classes, $item )
 {
     global $wpdb;
-    
+
 $has_children = $wpdb -> get_var( "SELECT COUNT(meta_id) FROM {$wpdb->prefix}postmeta WHERE meta_key='_menu_item_menu_item_parent' AND meta_value='" . $item->ID . "'" );
-    
+
     if ( $has_children > 0 )
     {
         array_push( $classes, "has-dropdown" );
     }
-    
+
     return $classes;
 }
- 
+
 add_filter( "nav_menu_css_class", "nav_menu_item_parent_classing", 10, 2 );
 
 //Deletes empty classes and changes the sub menu class name
