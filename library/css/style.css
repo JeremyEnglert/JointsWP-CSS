@@ -111,10 +111,7 @@ NAVIGATION STYLES
 POSTS & CONTENT STYLES
 *********************/
 #content {
-  /*adds highlight on hover */ }
-  #content a:hover, #content a:focus {
-    background: #008cba;
-    color: #fff; }
+}
 
 /* end .hentry */
 /* want to style individual post classes? Booya! */

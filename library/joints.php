@@ -74,22 +74,10 @@ function joints_head_cleanup() {
 	remove_action( 'wp_head', 'adjacent_posts_rel_link_wp_head', 10, 0 );
 	// WP version
 	remove_action( 'wp_head', 'wp_generator' );
-  // remove WP version from css
-  add_filter( 'style_loader_src', 'joints_remove_wp_ver_css_js', 9999 );
-  // remove Wp version from scripts
-  add_filter( 'script_loader_src', 'joints_remove_wp_ver_css_js', 9999 );
-
 } /* end Joints head cleanup */
 
 // remove WP version from RSS
 function joints_rss_version() { return ''; }
-
-// remove WP version from scripts
-function joints_remove_wp_ver_css_js( $src ) {
-    if ( strpos( $src, 'ver=' ) )
-        $src = remove_query_arg( 'ver', $src );
-    return $src;
-}
 
 // remove injected CSS for recent comments widget
 function joints_remove_wp_widget_recent_comments_style() {
@@ -120,30 +108,32 @@ SCRIPTS & ENQUEUEING
 function joints_scripts_and_styles() {
   global $wp_styles; // call global $wp_styles variable to add conditional wrapper around ie stylesheet the WordPress way
   if (!is_admin()) {
+    $theme_version = wp_get_theme()->Version;
 
-    // removes WP version of jQuery
-    wp_deregister_script('jquery');
-    
-   // loads jQuery 2.1.0
+	// removes WP version of jQuery
+	wp_deregister_script('jquery');
+	
+	// loads jQuery 2.1.0
     wp_enqueue_script( 'jquery', get_template_directory_uri() . '/foundation/js/vendor/jquery.js', array(), '2.1.0', false );
     
     // modernizr (without media query polyfill)
-    wp_enqueue_script( 'joints-modernizr', get_template_directory_uri() . '/foundation/js/vendor/modernizr.js', array(), '2.5.3', false );
+    wp_enqueue_script( 'modernizr', get_template_directory_uri() . '/foundation/js/vendor/modernizr.js', array(), '2.5.3', false );
     
     // adding Foundation scripts file in the footer
-    wp_enqueue_script( 'foundation-js', get_template_directory_uri() . '/foundation/js/foundation.min.js', array( 'jquery' ), '', true );
+    wp_enqueue_script( 'foundation-js', get_template_directory_uri() . '
+    /foundation/js/foundation.min.js', array( 'jquery' ), $theme_version, true );
    
     // register foundation stylesheet
-    wp_enqueue_style( 'foundation-stylesheet', get_stylesheet_directory_uri() . '/foundation/css/foundation.min.css', array(), '', 'all' );
-    
-    // register normalize stylesheet
-    wp_enqueue_style( 'normalize-stylesheet', get_stylesheet_directory_uri() . '/foundation/css/normalize.css', array(), '', 'all' );
+	wp_enqueue_style( 'foundation-stylesheet', get_stylesheet_directory_uri() . '/foundation/css/foundation.css', array(), '', 'all' );
+
+// register normalize stylesheet
+	wp_enqueue_style( 'normalize-stylesheet', get_stylesheet_directory_uri() . '/foundation/css/normalize.css', array(), '', 'all' );
+
+    // register main stylesheet
+    wp_enqueue_style( 'joints-stylesheet', get_template_directory_uri() . '/library/css/style.css', array(), $theme_version, 'all' );
     
     // register foundation icons
-    wp_enqueue_style( 'foundation-icons', get_stylesheet_directory_uri() . '/library/css/icons/foundation-icons.css', array(), '', 'all' );
-    
-    // register main stylesheet
-    wp_enqueue_style( 'joints-stylesheet', get_stylesheet_directory_uri() . '/library/css/style.css', array(), '', 'all' );
+    // wp_enqueue_style( 'foundation-icons', get_template_directory_uri() . '/library/css/icons/foundation-icons.css', array(), $theme_version, 'all' );
 
     // comment reply script for threaded comments
     if ( is_singular() AND comments_open() AND (get_option('thread_comments') == 1)) {
@@ -151,14 +141,7 @@ function joints_scripts_and_styles() {
     }
 
     //adding scripts file in the footer
-    wp_enqueue_script( 'joints-js', get_stylesheet_directory_uri() . '/library/js/scripts.js', array( 'jquery' ), '', true );
-
-    /*
-    I recommend using a plugin to call jQuery
-    using the google cdn. That way it stays cached
-    and your site will load faster.
-    */
-    wp_enqueue_script( 'joints-js' );
+    wp_enqueue_script( 'joints-js', get_template_directory_uri() . '/library/js/scripts.js', array( 'jquery' ), $theme_version, true );
 
   }
 }
@@ -278,9 +261,9 @@ function joints_page_navi($before = '', $after = '') {
 	echo $before.'<nav class="page-navigation"><ul class="pagination">'."";
 	if ($start_page >= 2 && $pages_to_show < $max_page) {
 		$first_page_text = __( "First", 'jointstheme' );
-		echo '<li class="bpn-first-page-link"><a href="'.get_pagenum_link().'" title="'.$first_page_text.'">'.$first_page_text.'</a></li>';
+		echo '<li><a href="'.get_pagenum_link().'" title="'.$first_page_text.'">'.$first_page_text.'</a></li>';
 	}
-	echo '<li class="bpn-prev-link">';
+	echo '<li>';
 	previous_posts_link('<<');
 	echo '</li>';
 	for($i = $start_page; $i  <= $end_page; $i++) {
@@ -290,12 +273,12 @@ function joints_page_navi($before = '', $after = '') {
 			echo '<li><a href="'.get_pagenum_link($i).'">'.$i.'</a></li>';
 		}
 	}
-	echo '<li class="bpn-next-link">';
+	echo '<li>';
 	next_posts_link('>>');
 	echo '</li>';
 	if ($end_page < $max_page) {
 		$last_page_text = __( "Last", 'jointstheme' );
-		echo '<li class="bpn-last-page-link"><a href="'.get_pagenum_link($max_page).'" title="'.$last_page_text.'">'.$last_page_text.'</a></li>';
+		echo '<li><a href="'.get_pagenum_link($max_page).'" title="'.$last_page_text.'">'.$last_page_text.'</a></li>';
 	}
 	echo '</ul></nav>'.$after."";
 } /* end page navi */
@@ -308,13 +291,19 @@ function nav_menu_item_parent_classing( $classes, $item )
 {
     global $wpdb;
     
-$has_children = $wpdb -> get_var( "SELECT COUNT(meta_id) FROM {$wpdb->prefix}postmeta WHERE meta_key='_menu_item_menu_item_parent' AND meta_value='" . $item->ID . "'" );
-    
-    if ( $has_children > 0 )
-    {
+    if ( 
+        !property_exists( $item, 'classes' ) 
+        || !is_array( $item->classes )
+    ) {
+        return $classes;
+    }
+
+    $has_children = in_array( 'menu-item-has-children', $item->classes );
+
+    if ( $has_children ) {
         array_push( $classes, "has-dropdown" );
     }
-    
+
     return $classes;
 }
  
@@ -380,4 +369,6 @@ function joints_get_the_author_posts_link() {
 	);
 	return $link;
 }
+
+
 ?>
