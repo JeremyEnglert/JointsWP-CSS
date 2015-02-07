@@ -15,13 +15,8 @@
 			
 		</footer> <!-- end article footer -->
 							    
-		<?php //comments_template(); ?>
+		<?php comments_template(); ?>
 						
 	</article> <!-- end article -->
 	
-<?php endwhile; else : ?>
-					
-	<?php get_template_part( 'partials/content', 'missing' ); ?>
-
-<?php endif; ?>
-							
+<?php endwhile; endif; ?>							
