@@ -1,3 +1,5 @@
+THIS VERSION IS NOT FOR PRODUCTION - YET. PLEASE USE THE MASTER VERSION FOR NOW.
+
 Find out more here: www.jointswp.com  
 Demo: www.jointswp.com/demo
 
