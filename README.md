@@ -12,7 +12,7 @@ JointsWP comes pre-baked with all of the great features that are found in the Fo
 - Foundation Navigation Options
 - Grid and Accordion archive templates
 - Translation Support
-- Bower and Gulp Support
+- Bower and Gulp Support (in Sass Version)
 - And much, much more!
 
 ### What tools do I need to use JointsWP?
