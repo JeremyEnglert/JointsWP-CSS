@@ -1,10 +1,16 @@
 Find out more here: www.jointswp.com  
 Demo: www.jointswp.com/demo
 
-Currently running Foundation 6.0.0alpha.
+### What is JointsWP?
+JointsWP is a blank WordPress theme built with Foundation 6, giving you all the power and flexibility you need to build complex, mobile friendly websites without having to start from scratch.
 
-NOT READY FOR PRODUCTION.
+Starting its humble life as a fork of the popular theme Bones, JointsWP is now the foundation of thousands of websites across the globe.
 
-### Known Issues
-- Archive grid has its own loop that clashes with the loop in index.php/archive.php (this stems from a recent change of moving the loop out of the partials and into index.php/archive/php)
-- Need to finish template-posts.php - a page template that also displays a list of posts
+### What comes with JointsWP?
+JointsWP comes pre-baked with all of the great features that are found in the Foundation framework – simply put, if it works in Foundation, it will work in JointsWP. The theme also includes:
+
+- Foundation Navigation Options
+- Grid archive templates
+- Translation Support
+- Bower and Gulp Support
+- And much, much more!
