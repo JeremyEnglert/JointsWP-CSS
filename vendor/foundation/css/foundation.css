@@ -1407,8 +1407,8 @@ kbd {
       border: 1px solid #777;
       color: #777; }
       .button.hollow.secondary:hover, .button.hollow.secondary:focus {
-        border-color: #3b3b3b;
-        color: #3b3b3b; }
+        border-color: #3c3c3c;
+        color: #3c3c3c; }
     .button.hollow.success {
       border: 1px solid #3adb76;
       color: #3adb76; }
@@ -1960,7 +1960,8 @@ select {
   width: 100%;
   background: #fefefe;
   transition: -webkit-transform 0.15s linear;
-  transition: transform 0.15s linear; }
+  transition: transform 0.15s linear;
+  transition: transform 0.15s linear, -webkit-transform 0.15s linear; }
   .is-drilldown-sub.is-active {
     z-index: 1;
     display: block;
@@ -2225,21 +2226,15 @@ html,
 body {
   height: 100%; }
 
-html {
-  overflow: hidden; }
-
 body {
-  width: 100%;
   overflow-x: hidden;
-  position: relative;
+  transition: -webkit-transform 0.5s ease;
+  transition: transform 0.5s ease;
+  transition: transform 0.5s ease, -webkit-transform 0.5s ease;
   -webkit-backface-visibility: hidden;
           backface-visibility: hidden; }
   body.is-off-canvas-open {
     overflow-y: hidden; }
-
-.off-canvas-wrapper {
-  transition: -webkit-transform 0.5s ease;
-  transition: transform 0.5s ease; }
 
 .js-off-canvas-exit {
   display: none;
@@ -2256,9 +2251,8 @@ body {
 
 .off-canvas {
   position: absolute;
-  background: #e6e6e6;
-  z-index: -1;
-  min-height: 100%; }
+  background: #fefefe;
+  z-index: -1; }
   [data-whatinput="mouse"] .off-canvas {
     outline: 0; }
   .off-canvas.position-left {
@@ -2283,9 +2277,9 @@ body {
   background: #fefefe;
   transition: -webkit-transform 0.5s ease;
   transition: transform 0.5s ease;
+  transition: transform 0.5s ease, -webkit-transform 0.5s ease;
   -webkit-backface-visibility: hidden;
           backface-visibility: hidden;
-  z-index: 1;
   box-shadow: 0 0 10px rgba(10, 10, 10, 0.5); }
 
 @media screen and (min-width: 32em) {

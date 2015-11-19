@@ -230,27 +230,15 @@ var foundation = function(method) {
     $noJS.removeClass('no-js');
   }
 
-  if(type === 'undefined'){//needs to initialize the Foundation object, or an individual plugin.
+  if (type === 'undefined') {
     Foundation.MediaQuery._init();
     Foundation.reflow(this);
-  }else if(type === 'string'){//an individual method to invoke on a plugin or group of plugins
-    var args = Array.prototype.slice.call(arguments, 1);//collect all the arguments, if necessary
-    var plugClass = this.data('zfPlugin');//determine the class of plugin
-
-    if(plugClass !== undefined && plugClass[method] !== undefined){//make sure both the class and method exist
-      if(this.length === 1){//if there's only one, call it directly.
-          plugClass[method].apply(plugClass, args);
-      }else{
-        this.each(function(i, el){//otherwise loop through the jQuery collection and invoke the method on each
-          plugClass[method].apply($(el).data('zfPlugin'), args);
-        });
-      }
-    }else{//error for no class or no method
-      throw new Error("We're sorry, " + method + " is not an available method for " + (plugClass ? functionName(plugClass) : 'this element') + '.');
-    }
-  }else{//error for invalid argument type
-    throw new Error("We're sorry, " + type + " is not a valid argument. You must use a string representing the method you wish to invoke.");
+  } else if (type === 'object') {
+    Foundation.reflow(this);
+  } else if (type === 'string' || type === 'array') {
+    Foundation.reflow(this, method);
   }
+
   return this;
 };
 
@@ -313,6 +301,34 @@ function hyphenate(str) {
 }
 
 }(jQuery);
+
+!function($, Foundation, window){
+   var Move = function(duration, elem, fn){
+    var anim, prog, start = null, _this = this;
+    this.dont = function(){
+      if(anim !== undefined){
+        window.cancelAnimationFrame(anim);
+        duration = 0;
+        return true;
+      }
+      return false;
+    };
+    this.do = function(ts){//timestamp returned from requestAnimationFrame
+      if(!ts || !start){ start = ts = window.performance.now(); }
+      prog = ts - start;
+      // console.log(prog, ts, start);
+      fn.apply(elem);//call the cb
+      if(prog < duration){
+        anim = window.requestAnimationFrame(_this.do, elem);
+      }else{
+        window.cancelAnimationFrame(anim);
+        elem.trigger('finished.zf.animate', [elem]);
+      }
+    };
+    window.requestAnimationFrame(this.do);
+  };
+  Foundation.Move = Move;
+}(jQuery, window.Foundation, window);
 
 !function(Foundation, window){
   /**
@@ -811,11 +827,29 @@ function parseStyleToObject(str) {
 /**
  * Motion module.
  * @module foundation.motion
+ * @requires foundation.util.animationFrame
  */
 !function($, Foundation) {
 
 var initClasses   = ['mui-enter', 'mui-leave'];
 var activeClasses = ['mui-enter-active', 'mui-leave-active'];
+
+// Find the right "transitionend" event for this browser
+var endEvent = (function() {
+  var transitions = {
+    'transition': 'transitionend',
+    'WebkitTransition': 'webkitTransitionEnd',
+    'MozTransition': 'transitionend',
+    'OTransition': 'otransitionend'
+  };
+  var elem = document.createElement('div');
+
+  for (var t in transitions){
+    if (typeof elem.style[t] !== 'undefined'){
+      return transitions[t];
+    }
+  }
+})();
 
 function animate(isIn, element, animation, cb) {
   element = $(element).eq(0);
@@ -827,28 +861,22 @@ function animate(isIn, element, animation, cb) {
 
   // Set up the animation
   reset();
-  element.addClass(animation)
-         .css('transition', 'none');
-        //  .addClass(initClass);
-  // if(isIn) element.show();
+  element.addClass(animation);
+  element.css('transition', 'none');
   requestAnimationFrame(function() {
     element.addClass(initClass);
     if (isIn) element.show();
   });
+
   // Start the animation
   requestAnimationFrame(function() {
     element[0].offsetWidth;
     element.css('transition', '');
     element.addClass(activeClass);
   });
-  // Move(500, element, function(){
-  //   // element[0].offsetWidth;
-  //   element.css('transition', '');
-  //   element.addClass(activeClass);
-  // });
 
   // Clean up the animation when it finishes
-  element.one(Foundation.transitionend, finish);//.one('finished.zf.animate', finish);
+  element.one('transitionend', finish);
 
   // Hides the element (for out animations), resets the element, and runs a callback
   function finish() {
@@ -865,38 +893,18 @@ function animate(isIn, element, animation, cb) {
 }
 
 var Motion = {
-  animateIn: function(element, animation, /*duration,*/ cb) {
+  animateIn: function(element, animation, cb) {
     animate(true, element, animation, cb);
   },
 
-  animateOut: function(element, animation, /*duration,*/ cb) {
+  animateOut: function(element, animation, cb) {
     animate(false, element, animation, cb);
   }
-};
+}
 
-var Move = function(duration, elem, fn){
-  var anim, prog, start = null;
-  // console.log('called');
-
-  function move(ts){
-    if(!start) start = window.performance.now();
-    // console.log(start, ts);
-    prog = ts - start;
-    fn.apply(elem);
-
-    if(prog < duration){ anim = window.requestAnimationFrame(move, elem); }
-    else{
-      window.cancelAnimationFrame(anim);
-      elem.trigger('finished.zf.animate', [elem]).triggerHandler('finished.zf.animate', [elem]);
-    }
-  }
-  anim = window.requestAnimationFrame(move);
-};
-
-Foundation.Move = Move;
 Foundation.Motion = Motion;
 
-}(jQuery, Foundation);
+}(jQuery, Foundation)
 
 !function($, Foundation){
   'use strict';
@@ -952,44 +960,6 @@ Foundation.Motion = Motion;
 
 !function($, Foundation){
   'use strict';
-  var Timer = function(elem, options, cb){
-    var _this = this,
-        duration = options.duration,//options is an object for easily adding features later.
-        nameSpace = Object.keys(elem.data())[0] || 'timer',
-        remain = -1,
-        start,
-        timer;
-
-    this.restart = function(){
-      remain = -1;
-      clearTimeout(timer);
-      this.start();
-    };
-
-    this.start = function(){
-      // if(!elem.data('paused')){ return false; }//maybe implement this sanity check if used for other things.
-      clearTimeout(timer);
-      remain = remain <= 0 ? duration : remain;
-      elem.data('paused', false);
-      start = Date.now();
-      timer = setTimeout(function(){
-        if(options.infinite){
-          _this.restart();//rerun the timer.
-        }
-        cb();
-      }, remain);
-      elem.trigger('timerstart.zf.' + nameSpace);
-    };
-
-    this.pause = function(){
-      //if(elem.data('paused')){ return false; }//maybe implement this sanity check if used for other things.
-      clearTimeout(timer);
-      elem.data('paused', true);
-      var end = Date.now();
-      remain = remain - (end - start);
-      elem.trigger('timerpaused.zf.' + nameSpace);
-    };
-  };
   /**
    * Runs a callback function when images are fully loaded.
    * @param {Object} images - Image(s) to check if loaded.
@@ -1024,8 +994,6 @@ Foundation.Motion = Motion;
       }
     });
   };
-
-  Foundation.Timer = Timer;
   Foundation.onImagesLoaded = onImagesLoaded;
 }(jQuery, window.Foundation);
 
@@ -1066,10 +1034,10 @@ Foundation.Motion = Motion;
       var dir;
       elapsedTime = new Date().getTime() - startTime;
       if(Math.abs(dx) >= $.spotSwipe.moveThreshold && elapsedTime <= $.spotSwipe.timeThreshold) {
-        dir = dx > 0 ? 'left' : 'right';
+        dir = dx > 0 ? 'left' : 'right'
       }
       else if(Math.abs(dy) >= $.spotSwipe.moveThreshold && elapsedTime <= $.spotSwipe.timeThreshold) {
-        dir = dy > 0 ? 'down' : 'up';
+        dir = dy > 0 ? 'down' : 'up'
       }
       if(dir) {
         onTouchEnd.call(this);
@@ -1083,7 +1051,7 @@ Foundation.Motion = Motion;
       startPosX = e.touches[0].pageX;
       startPosY = e.touches[0].pageY;
       isMoving = true;
-      startTime = new Date().getTime();
+      startTime = new Date().getTime()
       this.addEventListener('touchmove', onTouchMove, false);
       this.addEventListener('touchend', onTouchEnd, false);
     }
@@ -1105,36 +1073,6 @@ Foundation.Motion = Motion;
     } };
   });
 })(jQuery);
-/****************************************************
- * Method for adding psuedo drag events to elements *
- ***************************************************/
-!function($){
-  $.fn.addTouch = function(){
-    this.each(function(i,el){
-      $(el).bind('touchstart touchmove touchend touchcancel',function(){
-        //we pass the original event object because the jQuery event
-        //object is normalized to w3c specs and does not provide the TouchList
-        handleTouch(event);
-      });
-    });
-
-    var handleTouch = function(event){
-      var touches = event.changedTouches,
-          first = touches[0],
-          eventTypes = {
-            touchstart: 'mousedown',
-            touchmove: 'mousemove',
-            touchend: 'mouseup'
-          },
-          type = eventTypes[event.type];
-
-      var simulatedEvent = document.createEvent('MouseEvent');
-      simulatedEvent.initMouseEvent(type, true, true, window, 1, first.screenX, first.screenY, first.clientX, first.clientY, false, false, false, false, 0/*left*/, null);
-      first.target.dispatchEvent(simulatedEvent);
-    };
-  };
-}(jQuery);
-
 
 //**********************************
 //**From the jQuery Mobile Library**
@@ -1938,7 +1876,7 @@ Foundation.IFeelYou = closemeListener;
  * Accordion module.
  * @module foundation.accordion
  * @requires foundation.util.keyboard
- * @requires foundation.util.motion
+ * @requires foundation.util.animationFrame
  */
 !function($, Foundation) {
   'use strict';
@@ -2173,8 +2111,7 @@ Foundation.IFeelYou = closemeListener;
  * AccordionMenu module.
  * @module foundation.accordionMenu
  * @requires foundation.util.keyboard
- * @requires foundation.util.motion
- * @requires foundation.util.nest
+ * @requires foundation.util.animationFrame
  */
 !function($) {
   'use strict';
@@ -2444,8 +2381,7 @@ Foundation.IFeelYou = closemeListener;
  * Drilldown module.
  * @module foundation.drilldown
  * @requires foundation.util.keyboard
- * @requires foundation.util.motion
- * @requires foundation.util.nest
+ * @requires foundation.util.animationFrame
  */
 !function($, Foundation){
   'use strict';
@@ -2767,7 +2703,7 @@ Foundation.IFeelYou = closemeListener;
  * Dropdown module.
  * @module foundation.dropdown
  * @requires foundation.util.keyboard
- * @requires foundation.util.box
+ * @requires foundation.util.size-and-collision
  */
 !function($, Foundation){
   'use strict';
@@ -3088,8 +3024,7 @@ Foundation.IFeelYou = closemeListener;
  * DropdownMenu module.
  * @module foundation.dropdown-menu
  * @requires foundation.util.keyboard
- * @requires foundation.util.box
- * @requires foundation.util.nest
+ * @requires foundation.util.size-and-collision
  */
 !function(Foundation, $) {
   'use strict';
@@ -3718,7 +3653,6 @@ Foundation.IFeelYou = closemeListener;
  * Interchange module.
  * @module foundation.interchange
  * @requires foundation.util.mediaQuery
- * @requires foundation.util.timerAndImageLoader
  */
 !function(Foundation, $) {
   'use strict';
@@ -3902,6 +3836,7 @@ Foundation.IFeelYou = closemeListener;
 /**
  * Magellan module.
  * @module foundation.magellan
+ // * @requires foundation.util.animationFrame
  */
 !function(Foundation, $) {
   'use strict';
@@ -4101,7 +4036,7 @@ Foundation.IFeelYou = closemeListener;
  * OffCanvas module.
  * @module foundation.offcanvas
  * @requires foundation.util.triggers
- * @requires foundation.util.motion
+ * @requires foundation.util.animationFrame
  */
 !function($, Foundation) {
 
@@ -4310,7 +4245,7 @@ OffCanvas.prototype.open = function(event, trigger) {
    * @event OffCanvas#opened
    */
   Foundation.Move(this.options.transitionTime, this.$element, function(){
-    $('[data-off-canvas-wrapper]').addClass('is-off-canvas-open is-open-'+ _this.options.position);
+    $body.addClass('is-off-canvas-open is-open-'+ _this.options.position);
 
     _this.$element
       .addClass('is-open')
@@ -4360,7 +4295,7 @@ OffCanvas.prototype.close = function() {
   var _this = this;
 
    Foundation.Move(this.options.transitionTime, this.$element, function(){
-    $('[data-off-canvas-wrapper]').removeClass('is-off-canvas-open is-open-'+_this.options.position);
+    $('body').removeClass('is-off-canvas-open is-open-'+_this.options.position);
 
     _this.$element.removeClass('is-open');
     // Foundation._reflow();
@@ -4425,9 +4360,9 @@ Foundation.plugin(OffCanvas);
  * Orbit module.
  * @module foundation.orbit
  * @requires foundation.util.keyboard
+ * @requires foundation.util.animationFrame
  * @requires foundation.util.motion
- * @requires foundation.util.timerAndImageLoader
- * @requires foundation.util.touch
+ * @requires foundation.util.timer
  */
 !function($, Foundation){
   'use strict';
@@ -5000,10 +4935,9 @@ Foundation.plugin(ResponsiveToggle);
  * Reveal module.
  * @module foundation.reveal
  * @requires foundation.util.keyboard
- * @requires foundation.util.box
+ * @requires foundation.util.size-and-collision
  * @requires foundation.util.triggers
  * @requires foundation.util.mediaQuery
- * @requires foundation.util.motion if using animations
  */
 !function(Foundation, $) {
   'use strict';
@@ -5477,10 +5411,10 @@ Foundation.plugin(ResponsiveToggle);
 /**
  * Slider module.
  * @module foundation.slider
- * @requires foundation.util.motion
+ * @requires foundation.util.animationFrame
  * @requires foundation.util.triggers
  * @requires foundation.util.keyboard
- * @requires foundation.util.touch
+ * @requires foundation.util.addtouch
  */
 !function($, Foundation){
   'use strict';
@@ -5533,7 +5467,7 @@ Foundation.plugin(ResponsiveToggle);
     end: 100,
     /**
      * Minimum value change per change event. Not Currently Implemented!
-
+     * @option
      */
     step: 1,
     /**
@@ -5959,6 +5893,32 @@ Foundation.plugin(ResponsiveToggle);
 //   }
 //   cb();
 // };
+!function(){
+  $.fn.addTouch = function(){
+    this.each(function(i,el){
+      $(el).bind('touchstart touchmove touchend touchcancel',function(){
+        //we pass the original event object because the jQuery event
+        //object is normalized to w3c specs and does not provide the TouchList
+        handleTouch(event);
+      });
+    });
+
+    var handleTouch = function(event){
+      var touches = event.changedTouches,
+          first = touches[0],
+          eventTypes = {
+            touchstart: 'mousedown',
+            touchmove: 'mousemove',
+            touchend: 'mouseup'
+          },
+          type = eventTypes[event.type];
+
+      var simulatedEvent = document.createEvent('MouseEvent');
+      simulatedEvent.initMouseEvent(type, true, true, window, 1, first.screenX, first.screenY, first.clientX, first.clientY, false, false, false, false, 0/*left*/, null);
+      first.target.dispatchEvent(simulatedEvent);
+    };
+  };
+}();
 
 /**
  * Sticky module.
@@ -6406,7 +6366,6 @@ Foundation.plugin(ResponsiveToggle);
  * Tabs module.
  * @module foundation.tabs
  * @requires foundation.util.keyboard
- * @requires foundation.util.timerAndImageLoader if tabs contain images
  */
 !function($, Foundation) {
   'use strict';
@@ -6892,7 +6851,7 @@ Foundation.plugin(ResponsiveToggle);
 /**
  * Tooltip module.
  * @module foundation.tooltip
- * @requires foundation.util.box
+ * @requires foundation.util.size-and-collision
  * @requires foundation.util.triggers
  */
 !function($, document, Foundation){
@@ -7250,6 +7209,57 @@ Foundation.plugin(ResponsiveToggle);
 
   Foundation.plugin(Tooltip);
 }(jQuery, window.document, window.Foundation);
+
+!function($, Foundation){
+
+  /******************************************************************
+  /** A very simple timer for animated elements within Foundation. **
+  /** Allows your script to pause and restart later with fn call.  **
+  /**  Feel free to add features, comments, or use case examples.  **
+  /*****************************************************************/
+
+  var Timer = function(elem, options, cb){
+    var _this = this,
+        duration = options.duration,//options is an object for easily adding features later.
+        nameSpace = Object.keys(elem.data())[0] || 'timer',
+        remain = -1,
+        start,
+        timer;
+
+    this.restart = function(){
+      remain = -1;
+      clearTimeout(timer);
+      this.start();
+    };
+
+    this.start = function(){
+      // if(!elem.data('paused')){ return false; }//maybe implement this sanity check if used for other things.
+      clearTimeout(timer);
+      remain = remain <= 0 ? duration : remain;
+      elem.data('paused', false);
+      start = Date.now();
+      timer = setTimeout(function(){
+        if(options.infinite){
+          _this.restart();//rerun the timer.
+        }
+        cb();
+      }, remain);
+      elem.trigger('timerstart.zf.' + nameSpace);
+    };
+
+    this.pause = function(){
+      //if(elem.data('paused')){ return false; }//maybe implement this sanity check if used for other things.
+      clearTimeout(timer);
+      elem.data('paused', true);
+      var end = Date.now();
+      remain = remain - (end - start);
+      elem.trigger('timerpaused.zf.' + nameSpace);
+    };
+  };
+
+  Foundation.Timer = Timer;
+
+}(jQuery, window.Foundation);
 
 ;(function(root, factory) {
   if (typeof define === 'function' && define.amd) {
