@@ -13,12 +13,12 @@ function site_scripts() {
     
     // Adding scripts file in the footer
     wp_enqueue_script( 'site-js', get_template_directory_uri() . '/assets/js/scripts.js', array( 'vendor' ), '', true );
-   
-	 // Register Normalize
-    wp_enqueue_style( 'normalize-css', get_template_directory_uri() . '/vendor/normalize/normalize.css', array(), '', 'all' );
+    
+     // Register Motion-UI
+    //wp_enqueue_style( 'motion-ui-css', get_template_directory_uri() . '/vendor/motion-ui/dist/motion-ui.min.css', array(), '', 'all' );
 	
 	// Register Foundation styles
-    wp_enqueue_style( 'foundation-css', get_template_directory_uri() . '/vendor/foundation/css/foundation.min.css', array(), '', 'all' );
+    wp_enqueue_style( 'foundation-css', get_template_directory_uri() . '/vendor/foundation/css/foundation.css', array(), '', 'all' );
 
     // Register main stylesheet
     wp_enqueue_style( 'site-css', get_template_directory_uri() . '/assets/css/style.css', array(), '', 'all' );
