@@ -1,19 +1,10 @@
 Find out more here: www.jointswp.com  
 Demo: www.jointswp.com/demo
 
-### What is JointsWP?
-JointsWP is a blank WordPress theme built with Foundation 5, giving you all the power and flexibility you need to build complex, mobile friendly websites without having to start from scratch.
+Currently running Foundation 6.0.0alpha.
 
-Starting its humble life as a fork of the popular theme Bones, JointsWP is now the foundation of thousands of websites across the globe.
+NOT READY FOR PRODUCTION.
 
-### What comes with JointsWP?
-JointsWP comes pre-baked with all of the great features that are found in the Foundation framework – simply put, if it works in Foundation, it will work in JointsWP. The theme also includes:
-
-- Foundation Navigation Options
-- Grid and Accordion archive templates
-- Translation Support
-- Bower and Gulp Support (in Sass Version)
-- And much, much more!
-
-### What tools do I need to use JointsWP?
-You can use whatever you want – seriously. While the Sass version comes with Bower and Gulp support out of the box, you aren’t required to use those by any means. You can use CodeKit, Grunt, Compass or nothing at all. It’s completely up to you how you decide to build you theme – JointsWP won’t get in the way of your workflow.
+### Known Issues
+- Archive grid has its own loop that clashes with the loop in index.php/archive.php (this stems from a recent change of moving the loop out of the partials and into index.php/archive/php)
+- Need to finish template-posts.php - a page template that also displays a list of posts

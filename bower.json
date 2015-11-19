@@ -1,0 +1,8 @@
+{
+  "name": "JointsWP",
+  "private": true,
+  "ignore":  [],
+  "dependencies": {
+    "foundation": "~5.5.1"
+  }
+}

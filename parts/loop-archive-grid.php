@@ -1,12 +1,3 @@
-<?php						
-	$paged = (get_query_var('paged')) ? get_query_var('paged') : 1;	
-	$args = array (
-		'posts_per_page' => 9,
-		'paged' => $paged,
-	);
-	$posts = get_posts( $args );
-?>
-
 <?php foreach (array_chunk($posts, 3, true) as $posts) :  ?>
 
     <div class="row" data-equalizer> <!--Begin Row:--> 
@@ -42,11 +33,3 @@
 <?php endforeach; ?>    
 
 <?php wp_reset_postdata(); ?>
-					     
-<?php joints_page_navi(); ?>		
-
-<?php if ($posts = 0) : ?>
-
-	<?php get_template_part( 'parts/content', 'missing' ); ?>
-
-<?php endif; ?>
