@@ -14,7 +14,7 @@ function site_scripts() {
      // Register Motion-UI
     wp_enqueue_style( 'motion-ui-css', get_template_directory_uri() . '/vendor/motion-ui/dist/motion-ui.min.css', array(), '', 'all' );
 	
-	// Register Foundation styles
+	// Register Foundation styles - change this to foundation-flex.min.css to use the Flex Grid
     wp_enqueue_style( 'foundation-css', get_template_directory_uri() . '/vendor/foundation-sites/dist/foundation.min.css', array(), '', 'all' );
 
     // Register main stylesheet
