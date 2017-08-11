@@ -1,10 +1,17 @@
-<?php get_header(); ?>
+<?php
+/**
+ * Displays archive pages if a speicifc template is not set. 
+ *
+ * For more info: https://developer.wordpress.org/themes/basics/template-hierarchy/
+ */
+
+get_header(); ?>
 			
-	<div id="content">
+	<div class="content">
 	
-		<div id="inner-content" class="row">
+		<div class="inner-content grid-x grid-margin-x grid-padding-x">
 		
-		    <main id="main" class="large-8 medium-8 columns" role="main">
+		    <main class="main small-12 medium-8 large-8 cell" role="main">
 			    
 		    	<header>
 		    		<h1 class="page-title"><?php the_archive_title();?></h1>

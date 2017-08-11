@@ -1,7 +1,13 @@
 <?php
-	if ( post_password_required() ) {
-		return;
-	}
+/**
+ * Displays current comments and comment form. Works with includes/comments.php.
+ *
+ * For more info: https://developer.wordpress.org/themes/template-files-section/partial-and-miscellaneous-template-files/comments/
+ */ 
+
+if ( post_password_required() ) {
+	return;
+}
 ?>
 
 <div id="comments" class="comments-area">

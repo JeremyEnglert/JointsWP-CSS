@@ -2,15 +2,14 @@
 /*
 Template Name: Full Width (No Sidebar)
 */
-?>
 
-<?php get_header(); ?>
+get_header(); ?>
 			
-	<div id="content">
+	<div class="content">
 	
-		<div id="inner-content" class="row">
+		<div class="inner-content grid-x grid-margin-x grid-padding-x">
 	
-		    <main id="main" class="large-12 medium-12 columns" role="main">
+		    <main class="main small-12 medium-12 large-12 cell" role="main">
 				
 				<?php if (have_posts()) : while (have_posts()) : the_post(); ?>
 
