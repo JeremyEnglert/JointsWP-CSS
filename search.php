@@ -1,10 +1,17 @@
-<?php get_header(); ?>
+<?php 
+/**
+ * The template for displaying search results pages
+ *
+ * For more info: https://developer.wordpress.org/themes/basics/template-hierarchy/#search-result
+ */
+ 	
+get_header(); ?>
 			
-	<div id="content">
+	<div class="content">
 
-		<div id="inner-content" class="row">
+		<div class="inner-content grid-x grid-margin-x grid-padding-x">
 	
-			<main id="main" class="large-8 medium-8 columns first" role="main">
+			<main class="main small-12 medium-8 large-8 cell" role="main">
 				<header>
 					<h1 class="archive-title"><?php _e( 'Search Results for:', 'jointswp' ); ?> <?php echo esc_attr(get_search_query()); ?></h1>
 				</header>

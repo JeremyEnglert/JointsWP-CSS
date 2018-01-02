@@ -1,4 +1,10 @@
-<div id="post-not-found" class="hentry">
+<?php
+/**
+ * The template part for displaying a message that posts cannot be found
+ */
+?>
+
+<div class="post-not-found">
 	
 	<?php if ( is_search() ) : ?>
 		
