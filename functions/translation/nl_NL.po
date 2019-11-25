@@ -121,7 +121,7 @@ msgstr "Reactie versturen"
 
 #: comments.php:120
 msgid "You can use these tags"
-msgstr "U kunt deze labels gebruiken"
+msgstr "U kunt deze tags gebruiken"
 
 #: header.php:23
 #, php-format
@@ -185,7 +185,7 @@ msgstr "Lees meer over"
 
 #: archive.php:13
 msgid "Posts Tagged:"
-msgstr "Artikelen gelabeld:"
+msgstr "Getagde artikelen:"
 
 #: archive.php:17 author.php:8
 msgid "Posts By:"
@@ -341,36 +341,36 @@ msgstr "Naam nieuwe custom categorie"
 
 #: library/custom-post-type.php:95
 msgid "Custom Tag"
-msgstr "Custom label"
+msgstr "Custom tag"
 
 #: library/custom-post-type.php:96
 msgid "Search Custom Tags"
-msgstr "Zoek custom labels"
+msgstr "Zoek custom tags"
 
 #: library/custom-post-type.php:97
 msgid "All Custom Tags"
-msgstr "Alle custom labels"
+msgstr "Alle custom tags"
 
 #: library/custom-post-type.php:98
 msgid "Parent Custom Tag"
-msgstr "Parent custom label"
+msgstr "Parent custom tag"
 
 #: library/custom-post-type.php:99
 msgid "Parent Custom Tag:"
-msgstr "Parent custom label"
+msgstr "Parent custom tag"
 
 #: library/custom-post-type.php:100
 msgid "Edit Custom Tag"
-msgstr "Custom label bewerken"
+msgstr "Custom tag bewerken"
 
 #: library/custom-post-type.php:101
 msgid "Update Custom Tag"
-msgstr ""
+msgstr "Update custom tag"
 
 #: library/custom-post-type.php:102
 msgid "Add New Custom Tag"
-msgstr ""
+msgstr "Voeg custom tag toe"
 
 #: library/custom-post-type.php:103
 msgid "New Custom Tag Name"
-msgstr ""
+msgstr "Nieuwe custom tag naam"
